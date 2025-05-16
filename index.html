@@ -2,96 +2,262 @@
 <html lang="en">
 
 <head>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profildits</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+ @keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  background: linear-gradient(270deg, #4b6cb7, #182848, #0f2027, #203a43, #2c5364);
+  background-size: 1200% 1200%;
+  animation: gradientBG 30s ease infinite;
+}
+
+
+    input, textarea {
+      box-sizing: border-box;
+      padding: 20px 24px; /* bigger padding */
+      font-size: 18px; /* bigger font for readability */
+      line-height: 1.6;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border-radius: 0.5rem; /* slightly bigger rounded */
+      width: 100%;
+      min-height: 3.5rem; /* bigger height for inputs */
+      border: 1px solid #cbd5e1; /* subtle border */
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #6366f1; /* Tailwind indigo-500 */
+      box-shadow: 0 0 4px rgba(99, 102, 241, 0.5);
+    }
+
+    textarea {
+      white-space: normal;
+      overflow-y: auto;
+      min-height: 12rem; /* bigger height for textarea */
+      resize: vertical;
+      font-family: inherit;
+    }
+    #glass {
+  background: rgba(106, 106, 106, 0.15);
+  backdrop-filter: blur(3px);
+  border-radius: 1rem;
+  border: 2px solid rgba(108, 97, 97, 0.3);
+}
+
+  </style>
 </head>
 
-<body class="bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 min-h-screen p-4">
+<body class="bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 min-h-screen p-6">
 
-  <header class="flex justify-between items-center bg-white p-4 rounded shadow">
-    <div class="text-2xl font-bold">🌀 Profildits</div>
-    <div class="text-sm text-gray-600">Edit your profile</div>
+  <header class="flex justify-between items-center bg-white p-6 rounded shadow">
+    <div class="text-3xl font-bold">🌀 Profildits</div>
+    
   </header>
 
-  <div class="flex flex-col md:flex-row mt-6 gap-4">
-    <!-- Left Sidebar -->
 
-    <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
-      <h2 class="font-semibold text-lg mb-2">🎨 Colour Palette</h2>
-      <div class="mb-4">
-        <label class="block font-medium mb-2">Choose Theme Color:</label>
-        <input type="color" id="colorPicker" class="w-full h-10 p-1 rounded shadow border" />
+
+  <div class="flex flex-col md:flex-row mt-8 gap-6">
+    <!-- Left Sidebar -->
+    <div id="glass" class="w-full md:w-1/4 bg-white p-6 rounded shadow">
+      <h2 class="font-semibold text-xl mb-4">🎨 Colour Palette</h2>
+      <div class="mb-6">
+        <label class="block font-medium mb-3">Choose Theme Color:</label>
+        <input type="color" id="colorPicker" class="w-full h-12 p-1 rounded shadow border" />
       </div>
     </div>
 
     <!-- Main Profile Editor -->
-    <div class="w-full md:w-2/4 bg-white p-4 rounded shadow" id="profile-area">
+    <div class="w-full md:w-2/4 bg-white p-6 rounded shadow" id="profile-area">
       <div class="flex justify-center">
-        <input type="file" id="avatarInput" class="hidden">
+        <input type="file" id="avatarInput" class="hidden" accept="image/*" />
         <div id="avatarDisplay"
-          class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer flex items-center justify-center bg-gray-100">
+          class="w-28 h-28 rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer flex items-center justify-center bg-gray-100">
           <span class="text-gray-500">Upload</span>
         </div>
-        <input type="file" id="avatarInput" accept="image/*" class="hidden" />
-
       </div>
 
-      <input type="text" placeholder="Name" class="w-full mt-4 p-2 border rounded" />
-      <label class="block mt-4 font-semibold">About</label>
-      <div class="flex gap-2">
-        <textarea id="aboutInput" class="w-full p-2 rounded border h-32 resize-none"
-          placeholder="Write about yourself..."></textarea>
-        <button id="aiBtn" class="bg-indigo-500 text-white px-4 py-2 rounded">AI</button>
+      <input type="text" placeholder="Name" class="w-full mt-6" />
+      <label class="block mt-6 font-semibold text-lg">About</label>
+      <div class="flex gap-4">
+        <textarea id="aboutInput" placeholder="Write about yourself..."></textarea>
+        <button id="aiBtn" class="bg-indigo-600 text-white px-6 py-3 rounded text-lg">AI</button>
       </div>
 
-      <input type="text" placeholder="Skills" class="w-full mt-2 p-2 border rounded" />
-      <input type="text" placeholder="Degree / Education" class="w-full mt-2 p-2 border rounded" />
+      <input type="text" placeholder="Skills" class="w-full mt-4" />
+      <input type="text" placeholder="Degree / Education" class="w-full mt-4" />
 
-      <label class="block mt-4 font-semibold">Add Social Profiles</label>
+      <label class="block mt-6 font-semibold text-lg">Add Social Profiles</label>
       <div id="profileLinks"></div>
-      <button id="addLinkBtn" class="mt-2 px-3 py-1 bg-green-500 text-white rounded">Add Link</button>
+      <button id="addLinkBtn" class="mt-3 px-5 py-2 bg-green-600 text-white rounded text-lg hover:bg-green-700 transition-all">
+        Add Link
+      </button>
 
-      <label class="block mt-4 font-semibold">Interests</label>
-      <input type="text" id="interestInput" placeholder="Type and press Enter" class="w-full border rounded p-2" />
-      <div id="interestChips" class="flex flex-wrap gap-2 mt-2"></div>
-      <div class="mt-6">
-        <button id="generateLinkBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all">
+      <label class="block mt-6 font-semibold text-lg">Interests</label>
+      <input type="text" id="interestInput" placeholder="Type and press Enter" class="w-full" />
+      <div id="interestChips" class="flex flex-wrap gap-3 mt-3"></div>
+
+      <div class="mt-8">
+        <button id="generateLinkBtn"
+          class="px-6 py-3 bg-blue-700 text-white rounded hover:bg-blue-800 transition-all text-lg">
           Generate Profile Link & QR
         </button>
-        <div class="flex items-center gap-2 mt-4">
-  <a id="shareLink" class="hidden underline text-sm" target="_blank"></a>
-  <!-- Copy button will be injected here -->
-</div>
 
-        <div id="shareLink" class="mt-4 text-blue-600 underline break-words hidden"></div>
-          
-        <div id="qrContainer" class="mt-4 hidden">
-          <div id="qrCode" class="mb-2"></div>
-          <button id="downloadQR" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-all">
+        <div id="shareLink" class="mt-5 text-blue-700 underline break-words hidden"></div>
+
+        <div id="qrContainer" class="mt-6 hidden">
+          <div id="qrCode" class="mb-4"></div>
+          <button id="downloadQR"
+            class="bg-green-700 text-white px-5 py-3 rounded hover:bg-green-800 transition-all text-lg">
             Download QR Code
           </button>
-          <br>
-          <br>
+     <div class="mt-6">
+  <h3 class="text-lg font-semibold mb-3">🔗 Share your profile</h3>
+  <div class="flex flex-wrap gap-4 text-xl">
+    <a id="whatsappShare" target="_blank" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full flex items-center justify-center">
+      <i data-lucide="whatsapp" class="w-5 h-5"></i>
+    </a>
+    <a id="facebookShare" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full flex items-center justify-center">
+      <i data-lucide="facebook" class="w-5 h-5"></i>
+    </a>
+    <a id="twitterShare" target="_blank" class="bg-blue-400 hover:bg-blue-500 text-white p-3 rounded-full flex items-center justify-center">
+      <i data-lucide="twitter" class="w-5 h-5"></i>
+    </a>
+    <a id="linkedinShare" target="_blank" class="bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-full flex items-center justify-center">
+      <i data-lucide="linkedin" class="w-5 h-5"></i>
+    </a>
+    <button id="copyLinkBtn" class="bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-full flex items-center justify-center">
+      <i data-lucide="copy" class="w-5 h-5"></i>
+    </button>
+  </div>
+  <p id="copyMsg" class="text-green-700 mt-2 hidden text-sm">✅ Link copied to clipboard!</p>
+</div>
+
+
+          <br><br>
         </div>
       </div>
     </div>
-    <!-- Right Sidebar -->
-    <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
-      <h2 class="font-semibold text-lg mb-2">📐 Profile Designs</h2>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 1</div>
-        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 2</div>
-        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 3</div>
-      </div>
-    </div>
-  </div>
- <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Right Sidebar -->
+<div id="glass" class="w-full md:w-1/4 bg-white p-6 rounded shadow">
+  <h2 class="font-semibold text-xl mb-4">📐 Profile Designs</h2>
+  <div class="grid grid-cols-2 gap-4 text-center text-base cursor-pointer profile-style">
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 1</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 2</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 3</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 4</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 5</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 6</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 7</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 8</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 9</div>
+    <div class="border p-4 rounded hover:bg-gray-100 transition">Layout 10</div>
+  </div>
+</div>
+
+  </div>
+<div id="tsparticles" class="fixed inset-0 -z-10"></div>
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+<script>
+  lucide.createIcons();
+</script>
+
+<script>
+  tsParticles.load("tsparticles", {
+    fullScreen: {
+      enable: false
+    },
+    background: {
+      color: {
+        value: "transparent"
+      }
+    },
+    particles: {
+      number: {
+        value: 100,
+        density: {
+          enable: true,
+          area: 800
+        }
+      },
+      color: {
+        value: ["#ff6ec4", "#7873f5", "#6ee7b7", "#93c5fd", "#facc15"] // gradient tones
+      },
+      shape: {
+        type: ["circle", "star"] // mixed shapes
+      },
+      opacity: {
+        value: 0.6
+      },
+      size: {
+        value: { min: 2, max: 6 }
+      },
+      move: {
+        enable: true,
+        speed: 0.5, // dreamy slow
+        direction: "none",
+        outModes: {
+          default: "out"
+        }
+      },
+      links: {
+        enable: true,
+        distance: 140,
+        color: "#444",
+        opacity: 0.4,
+        width: 1
+      }
+    },
+    interactivity: {
+      events: {
+        onHover: {
+          enable: true,
+          mode: "grab"
+        }
+      },
+      modes: {
+        grab: {
+          distance: 150,
+          links: {
+            opacity: 0.6
+          }
+        }
+      }
+    },
+    detectRetina: true
+  });
+</script>
+
+
 
 </body>
 
