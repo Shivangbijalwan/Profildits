@@ -101,16 +101,33 @@ const downloadQRBtn = document.getElementById('downloadQR');
 function hideDownloadButtonDuringCapture() {
   generateLinkBtn.style.display = 'none';
   downloadQRBtn.style.display = 'none';
+  shareLink.style.display = 'none';
 }
 
 function showDownloadButtonAfterCapture() {
   generateLinkBtn.style.display = '';
   downloadQRBtn.style.display = '';
+  shareLink.style.display = '';
 }
 
 generateLinkBtn.addEventListener('click', async () => {
+  const scrollY = window.scrollY;
+  const profileAreaEl = document.getElementById('profile-area');
+  const originalPosition = profileAreaEl.style.position;
+  const originalTop = profileAreaEl.style.top;
+
   hideDownloadButtonDuringCapture();
-  const canvas = await html2canvas(document.getElementById('profile-area'));
+
+  // Fix position
+  profileAreaEl.style.position = 'relative';
+  profileAreaEl.style.top = `-${scrollY}px`;
+
+  const canvas = await html2canvas(profileAreaEl);
+
+  // Reset position
+  profileAreaEl.style.position = originalPosition;
+  profileAreaEl.style.top = originalTop;
+
   showDownloadButtonAfterCapture();
 
   const dataUrl = canvas.toDataURL();
@@ -119,7 +136,7 @@ generateLinkBtn.addEventListener('click', async () => {
   const formData = new FormData();
   formData.append("image", base64Image);
 
-  const response = await fetch("https://api.imgbb.com/1/upload?key=6eef1f3aadb547e0e46840dfd1e63d95", {
+  const response = await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY", {
     method: "POST",
     body: formData
   });
