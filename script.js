@@ -137,7 +137,7 @@ generateLinkBtn.addEventListener('click', async () => {
   const formData = new FormData();
   formData.append("image", base64Image);
 
-  const response = await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY", {
+  const response = await fetch("https://api.imgbb.com/1/upload?key=6eef1f3aadb547e0e46840dfd1e63d95", {
     method: "POST",
     body: formData
   });
