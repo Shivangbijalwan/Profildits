@@ -183,9 +183,11 @@ if (navigator.share) {
     title: 'Profiledits Profile',
     text: 'Check out my Profildits profile:',
     url: window.location.href
+
   });
 }
-
+const imageLink = canvas.toDataURL(); // or the actual hosted image URL if uploaded
+document.getElementById("generatedImageURL").value = imageLink; // store it
 
   // Fix position to avoid scroll in canvas capture
   profileArea.style.position = 'relative';
