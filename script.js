@@ -1,3 +1,5 @@
+// JavaScript (Complete with avatar preview, color picker, AI suggestions, interests, social links, layout switcher, shareable QR code)
+
 // Avatar upload with image preview and drag-drop support
 const avatarInput = document.getElementById('avatarInput');
 const avatarDisplay = document.getElementById('avatarDisplay');
@@ -17,10 +19,6 @@ function handleAvatarUpload(e) {
 }
 
 function previewAvatar(file) {
-  if (!file.type.startsWith('image/')) {
-    alert('Please upload a valid image file.');
-    return;
-  }
   const reader = new FileReader();
   reader.onload = () => {
     avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover">`;
@@ -76,12 +74,6 @@ interestInput.addEventListener('keypress', (e) => {
     const text = interestInput.value.trim();
     if (!text) return;
 
-    const existingTags = Array.from(interestChips.children).map(chip => chip.textContent.trim().slice(0, -1));
-    if (existingTags.includes(text)) {
-      alert("This interest already exists.");
-      return;
-    }
-
     const chip = document.createElement('div');
     chip.className = 'bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1';
     chip.innerHTML = `${text} <span class="cursor-pointer text-red-500">&times;</span>`;
@@ -120,9 +112,7 @@ const layouts = document.querySelectorAll('.profile-style');
 
 layouts.forEach((layout, index) => {
   layout.addEventListener('click', () => {
-    profileArea.classList.remove('border-2', 'border-blue-500', 'bg-white', 'bg-gray-100', 'shadow-xl', 'scale-105');
-    profileArea.classList.add('w-full', 'md:w-2/4', 'p-4', 'rounded', 'shadow', 'transition-all', 'duration-300');
-
+    profileArea.className = 'w-full md:w-2/4 p-4 rounded shadow transition-all duration-300';
     if (index === 0) {
       profileArea.classList.add('border-2', 'border-blue-500', 'bg-white');
     } else if (index === 1) {
@@ -133,6 +123,18 @@ layouts.forEach((layout, index) => {
   });
 });
 
+// Ensure all images are loaded
+function ensureImagesLoaded(container) {
+  const images = container.querySelectorAll('img');
+  const promises = Array.from(images).map(img => {
+    if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+    return new Promise(resolve => {
+      img.onload = img.onerror = resolve;
+    });
+  });
+  return Promise.all(promises);
+}
+
 // Generate profile shareable link & QR code with imgbb upload
 const generateLinkBtn = document.getElementById('generateLinkBtn');
 const shareLink = document.getElementById('shareLink');
@@ -140,36 +142,28 @@ const qrContainer = document.getElementById('qrContainer');
 const qrCodeDiv = document.getElementById('qrCode');
 const downloadQRBtn = document.getElementById('downloadQR');
 
-function hideDownloadButtonDuringCapture() {
-  generateLinkBtn.style.display = 'none';
-  downloadQRBtn.style.display = 'none';
-  shareLink.style.display = 'none';
-}
-
-function showDownloadButtonAfterCapture() {
-  generateLinkBtn.style.display = '';
-  downloadQRBtn.style.display = '';
-  shareLink.style.display = '';
-}
-
 generateLinkBtn.addEventListener('click', async () => {
-  generateLinkBtn.textContent = "Generating...";
-  generateLinkBtn.disabled = true;
-
   const scrollY = window.scrollY;
   const profileAreaEl = document.getElementById('profile-area');
   const originalPosition = profileAreaEl.style.position;
   const originalTop = profileAreaEl.style.top;
 
-  hideDownloadButtonDuringCapture();
+  generateLinkBtn.style.display = 'none';
+  downloadQRBtn.style.display = 'none';
+  shareLink.style.display = 'none';
+
   profileAreaEl.style.position = 'relative';
   profileAreaEl.style.top = `-${scrollY}px`;
 
+  await ensureImagesLoaded(profileAreaEl);
   const canvas = await html2canvas(profileAreaEl);
 
   profileAreaEl.style.position = originalPosition;
   profileAreaEl.style.top = originalTop;
-  showDownloadButtonAfterCapture();
+
+  generateLinkBtn.style.display = '';
+  downloadQRBtn.style.display = '';
+  shareLink.style.display = '';
 
   const dataUrl = canvas.toDataURL();
   const base64Image = dataUrl.split(',')[1];
@@ -177,7 +171,7 @@ generateLinkBtn.addEventListener('click', async () => {
   const formData = new FormData();
   formData.append("image", base64Image);
 
-  const response = await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY", {
+  const response = await fetch("https://api.imgbb.com/1/upload?key=6eef1f3aadb547e0e46840dfd1e63d95", {
     method: "POST",
     body: formData
   });
@@ -208,15 +202,6 @@ generateLinkBtn.addEventListener('click', async () => {
     a.download = "profile_qr.png";
     a.click();
   };
-
-  shareLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    navigator.clipboard.writeText(shareLink.href);
-    alert('Link copied to clipboard!');
-  });
-
-  generateLinkBtn.textContent = "Generate Link";
-  generateLinkBtn.disabled = false;
 });
 
 // Live Preview Feature
