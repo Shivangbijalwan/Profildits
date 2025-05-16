@@ -5,135 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profildits</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
-<body class="bg-gray-100 font-sans transition-colors duration-300" id="mainBody">
-  <!-- Header -->
-  <header class="flex items-center justify-between p-4 bg-white shadow">
-    <div class="flex items-center gap-3">
-      <div class="bg-black text-white px-3 py-1 rounded font-bold">Logo</div>
-      <h1 class="text-2xl font-bold">Profildits</h1>
-    </div>
-    <p class="text-gray-500">Edit your profile</p>
+<body class="bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 min-h-screen p-4">
+
+  <header class="flex justify-between items-center bg-white p-4 rounded shadow">
+    <div class="text-2xl font-bold">🌀 Profildits</div>
+    <div class="text-sm text-gray-600">Edit your profile</div>
   </header>
 
-  <main class="grid grid-cols-12 gap-6 p-6">
-    <!-- Colour Pallet -->
-    <aside class="col-span-2 bg-white p-4 rounded shadow">
-      <h2 class="font-semibold text-lg mb-4">Colour Pallet</h2>
-      <div class="space-y-3">
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
+  <div class="flex flex-col md:flex-row mt-6 gap-4">
+    <!-- Left Sidebar -->
+    <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
+      <h2 class="font-semibold text-lg mb-2">🎨 Colour Palette</h2>
+      <div class="flex gap-2">
+        <button class="w-6 h-6 bg-blue-400 rounded color-btn" data-color="bg-blue-100"></button>
+        <button class="w-6 h-6 bg-pink-400 rounded color-btn" data-color="bg-pink-100"></button>
+        <button class="w-6 h-6 bg-green-400 rounded color-btn" data-color="bg-green-100"></button>
       </div>
-    </aside>
+    </div>
 
-    <!-- Profile Form -->
-    <section class="col-span-6 bg-white p-6 rounded shadow transition-all duration-500" id="profileSection">
-      <div class="flex justify-center mb-6">
-        <label class="cursor-pointer">
-          <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-            <img id="avatarImage" class="hidden w-full h-full object-cover" />
-            <span class="text-gray-500" id="avatarPlaceholder">+</span>
-            <input type="file" id="avatarInput" class="hidden" accept="image/*" />
-          </div>
-        </label>
+    <!-- Main Profile Editor -->
+    <div class="w-full md:w-2/4 bg-white p-4 rounded shadow" id="profile-area">
+      <div class="flex justify-center">
+        <input type="file" id="avatarInput" class="hidden">
+        <div id="avatarDisplay" class="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-sm text-gray-500 cursor-pointer">
+          Upload
+        </div>
       </div>
 
-      <div class="space-y-4">
-        <input type="text" placeholder="Name" class="w-full border rounded p-2" id="name" />
-        <div class="flex items-center gap-2">
-          <textarea placeholder="About" class="w-full border rounded p-2" id="about"></textarea>
-          <button onclick="generateAIAbout()" class="bg-blue-500 text-white px-3 py-2 rounded">AI</button>
-        </div>
-        <input type="text" placeholder="Bio" class="w-full border rounded p-2" id="bio" />
-        <input type="text" placeholder="Skills" class="w-full border rounded p-2" id="skills" />
-        <input type="text" placeholder="Degree / Education" class="w-full border rounded p-2" id="education" />
-        <button onclick="downloadProfile()" class="bg-green-500 text-white px-4 py-2 rounded">Download</button>
+      <input type="text" placeholder="Name" class="w-full mt-4 p-2 border rounded" />
+      <div class="flex mt-2 gap-2">
+        <input type="text" placeholder="About" id="aboutInput" class="w-full p-2 border rounded" />
+        <button id="aiBtn" class="bg-blue-500 text-white px-4 rounded">AI</button>
       </div>
-    </section>
+      <input type="text" placeholder="Skills" class="w-full mt-2 p-2 border rounded" />
+      <input type="text" placeholder="Degree / Education" class="w-full mt-2 p-2 border rounded" />
 
-    <!-- Profile Designs -->
-    <aside class="col-span-4 bg-white p-4 rounded shadow">
-      <h2 class="font-semibold text-lg mb-4">Profile Designs</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(1)">
-          <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 1" />
-        </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(2)">
-          <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 2" />
-        </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(3)">
-          <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 3" />
-        </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(4)">
-          <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 4" />
-        </div>
+      <h3 class="font-semibold mt-4">Interest Tags</h3>
+      <input type="text" placeholder="Add interests..." class="w-full p-2 border rounded" />
+
+      <button id="downloadBtn" class="mt-4 bg-green-500 text-white w-full py-2 rounded">📥 Download Profile Image</button>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
+      <h2 class="font-semibold text-lg mb-2">📐 Profile Designs</h2>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 1</div>
+        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 2</div>
+        <div class="border p-2 text-center text-sm cursor-pointer profile-style">Layout 3</div>
       </div>
-    </aside>
-  </main>
+    </div>
+  </div>
 
-  <script>
-    const avatarInput = document.getElementById('avatarInput');
-    const avatarImage = document.getElementById('avatarImage');
-    const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-
-    avatarInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          avatarImage.src = event.target.result;
-          avatarImage.classList.remove('hidden');
-          avatarPlaceholder.classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function generateAIAbout() {
-      const about = document.getElementById("about");
-      about.value = "A passionate individual who loves to build and design digital products that make a difference.";
-    }
-
-    function changeColor(color) {
-      document.getElementById("mainBody").style.backgroundColor = color;
-    }
-
-    function switchProfileDesign(id) {
-      const profile = document.getElementById("profileSection");
-      switch (id) {
-        case 1:
-          profile.className = "col-span-6 bg-white p-6 rounded shadow border-l-8 border-blue-500 transition-all duration-500";
-          break;
-        case 2:
-          profile.className = "col-span-6 bg-white p-6 rounded shadow border-t-4 border-green-500 transition-all duration-500";
-          break;
-        case 3:
-          profile.className = "col-span-6 bg-white p-6 rounded shadow border-b-4 border-purple-500 transition-all duration-500";
-          break;
-        case 4:
-          profile.className = "col-span-6 bg-white p-6 rounded shadow border-r-8 border-pink-500 transition-all duration-500";
-          break;
-      }
-    }
-
-    function downloadProfile() {
-      const data = {
-        name: document.getElementById("name").value,
-        about: document.getElementById("about").value,
-        bio: document.getElementById("bio").value,
-        skills: document.getElementById("skills").value,
-        education: document.getElementById("education").value
-      };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "profile.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
