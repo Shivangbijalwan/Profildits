@@ -154,27 +154,3 @@ inputs.forEach(input => {
   });
 });
 
-// Dark Mode Toggle with improved styling
-const darkToggle = document.createElement('button');
-darkToggle.className = 'fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded shadow z-50';
-document.body.appendChild(darkToggle);
-
-let isDark = localStorage.getItem('darkMode') === 'true';
-
-const applyDarkMode = () => {
-  document.body.classList.toggle('bg-gray-900', isDark);
-  document.body.classList.toggle('text-white', isDark);
-  document.querySelectorAll('.bg-white, .bg-gray-100').forEach(el => {
-    el.classList.toggle('bg-gray-800', isDark);
-    el.classList.toggle('text-white', isDark);
-  });
-  darkToggle.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-};
-
-applyDarkMode();
-
-darkToggle.addEventListener('click', () => {
-  isDark = !isDark;
-  localStorage.setItem('darkMode', isDark);
-  applyDarkMode();
-});
