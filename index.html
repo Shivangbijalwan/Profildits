@@ -61,13 +61,13 @@
         <button id="generateLinkBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all">
           Generate Profile Link & QR
         </button>
+        <div class="flex items-center gap-2 mt-4">
+  <a id="shareLink" class="hidden underline text-sm" target="_blank"></a>
+  <!-- Copy button will be injected here -->
+</div>
 
         <div id="shareLink" class="mt-4 text-blue-600 underline break-words hidden"></div>
-        <div class="flex items-center gap-2 mt-4">
-          <a id="shareLink" class="hidden underline text-sm" target="_blank"></a>
-          <!-- Copy button will be injected here -->
-        </div>
-
+          
         <div id="qrContainer" class="mt-4 hidden">
           <div id="qrCode" class="mb-2"></div>
           <button id="downloadQR" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-all">
