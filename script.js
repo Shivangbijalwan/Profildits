@@ -166,11 +166,6 @@ generateLinkBtn.addEventListener('click', async () => {
   document.getElementById("generateLinkBtn").addEventListener("click", () => {
   const link = window.location.href;
 
-  // Update share links
-  document.getElementById("whatsappShare").href = `https://wa.me/?text=Check%20out%20my%20profile%20here:%20${encodeURIComponent(link)}`;
-  document.getElementById("facebookShare").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
-  document.getElementById("twitterShare").href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(link)}&text=Check%20out%20my%20profile!`;
-  document.getElementById("linkedinShare").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`;
 });
 
 document.getElementById("copyLinkBtn").addEventListener("click", () => {
@@ -183,14 +178,27 @@ document.getElementById("copyLinkBtn").addEventListener("click", () => {
 });
 
 
-if (navigator.share) {
-  navigator.share({
-    title: 'Check out my Profildits profile',
-    text: 'Here is my profile:',
-    url: window.location.href
-  });
-}
+const profileElement = document.getElementById("profile-area");
 
+html2canvas(profileElement).then(canvas => {
+  canvas.toBlob(blob => {
+    const file = new File([blob], "profile.png", { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: "My Profildits Profile",
+        text: "Check out my Profildits profile!",
+        files: [file]
+      }).then(() => {
+        console.log('Shared successfully!');
+      }).catch(error => {
+        console.error('Error sharing:', error);
+      });
+    } else {
+      alert("Sharing image is not supported on this browser.");
+    }
+  });
+});
 
   // Fix position to avoid scroll in canvas capture
   profileArea.style.position = 'relative';
