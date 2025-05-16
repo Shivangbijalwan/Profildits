@@ -76,13 +76,13 @@ const layouts = document.querySelectorAll('.profile-style');
 
 layouts.forEach((layout, index) => {
   layout.addEventListener('click', () => {
-    profileArea.className = 'w-full md:w-2/4 bg-white p-4 rounded shadow';
+    profileArea.className = 'w-full md:w-2/4 bg-white p-4 rounded shadow transition-all duration-300';
     if (index === 0) {
       profileArea.classList.add('border-2', 'border-blue-500');
     } else if (index === 1) {
       profileArea.classList.add('bg-gray-100', 'shadow-xl');
     } else if (index === 2) {
-      profileArea.classList.add('scale-105', 'transition-transform');
+      profileArea.classList.add('scale-105');
     }
   });
 });
@@ -125,4 +125,29 @@ generateLinkBtn.addEventListener('click', async () => {
     a.download = "profile_qr.png";
     a.click();
   };
+});
+
+// Live Preview Feature
+const inputs = document.querySelectorAll('input[type="text"], textarea');
+inputs.forEach(input => {
+  input.addEventListener('input', () => {
+    profileArea.classList.add('ring-2', 'ring-indigo-400');
+    setTimeout(() => {
+      profileArea.classList.remove('ring-2', 'ring-indigo-400');
+    }, 1000);
+  });
+});
+
+// Dark Mode Toggle
+const darkToggle = document.createElement('button');
+darkToggle.innerText = '🌙 Dark Mode';
+darkToggle.className = 'fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded shadow z-50';
+document.body.appendChild(darkToggle);
+
+let isDark = false;
+darkToggle.addEventListener('click', () => {
+  document.body.classList.toggle('bg-gray-900');
+  document.body.classList.toggle('text-white');
+  isDark = !isDark;
+  darkToggle.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
 });
