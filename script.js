@@ -91,7 +91,7 @@ layouts.forEach((layout, index) => {
   });
 });
 
-// Generate profile shareable link & QR code
+// Generate profile shareable link & QR code with imgbb upload
 const generateLinkBtn = document.getElementById('generateLinkBtn');
 const shareLink = document.getElementById('shareLink');
 const qrContainer = document.getElementById('qrContainer');
@@ -114,17 +114,26 @@ generateLinkBtn.addEventListener('click', async () => {
   showDownloadButtonAfterCapture();
 
   const dataUrl = canvas.toDataURL();
-  const blob = await fetch(dataUrl).then(res => res.blob());
-  const file = new File([blob], "profile.png", { type: "image/png" });
-  const fileUrl = URL.createObjectURL(file);
+  const base64Image = dataUrl.split(',')[1];
 
-  shareLink.textContent = fileUrl;
-  shareLink.href = fileUrl;
+  const formData = new FormData();
+  formData.append("image", base64Image);
+
+  const response = await fetch("https://api.imgbb.com/1/upload?key=6eef1f3aadb547e0e46840dfd1e63d95", {
+    method: "POST",
+    body: formData
+  });
+
+  const result = await response.json();
+  const imageUrl = result.data.url;
+
+  shareLink.textContent = imageUrl;
+  shareLink.href = imageUrl;
   shareLink.classList.remove('hidden');
 
   qrCodeDiv.innerHTML = '';
   new QRCode(qrCodeDiv, {
-    text: fileUrl,
+    text: imageUrl,
     width: 128,
     height: 128,
     colorDark: "#000000",
@@ -153,4 +162,3 @@ inputs.forEach(input => {
     }, 1000);
   });
 });
-
