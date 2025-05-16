@@ -9,7 +9,8 @@ avatarInput.addEventListener('change', (e) => {
 
   const reader = new FileReader();
   reader.onload = () => {
-    avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover">`;
+   avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover rounded-full">`;
+
   };
   reader.readAsDataURL(file);
 });

@@ -18,7 +18,7 @@
 
   <div class="flex flex-col md:flex-row mt-6 gap-4">
     <!-- Left Sidebar -->
-     
+
     <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
       <h2 class="font-semibold text-lg mb-2">🎨 Colour Palette</h2>
       <div class="mb-4">
@@ -32,10 +32,10 @@
       <div class="flex justify-center">
         <input type="file" id="avatarInput" class="hidden">
         <div id="avatarDisplay"
-          class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden border">
+          class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer flex items-center justify-center bg-gray-100">
           <span class="text-gray-500">Upload</span>
         </div>
-        <input type="file" id="avatarInput" class="hidden" accept="image/*" />
+        <input type="file" id="avatarInput" accept="image/*" class="hidden" />
 
       </div>
 
@@ -57,21 +57,21 @@
       <label class="block mt-4 font-semibold">Interests</label>
       <input type="text" id="interestInput" placeholder="Type and press Enter" class="w-full border rounded p-2" />
       <div id="interestChips" class="flex flex-wrap gap-2 mt-2"></div>
-     <div class="mt-6">
-  <button id="generateLinkBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all">
-    Generate Profile Link & QR
-  </button>
+      <div class="mt-6">
+        <button id="generateLinkBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all">
+          Generate Profile Link & QR
+        </button>
 
-  <div id="shareLink" class="mt-4 text-blue-600 underline break-words hidden"></div>
+        <div id="shareLink" class="mt-4 text-blue-600 underline break-words hidden"></div>
 
-  <div id="qrContainer" class="mt-4 hidden">
-    <div id="qrCode" class="mb-2"></div>
-    <button id="downloadQR" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-all">
-      Download QR Code
-    </button>
-  </div>
-</div>
-</div>
+        <div id="qrContainer" class="mt-4 hidden">
+          <div id="qrCode" class="mb-2"></div>
+          <button id="downloadQR" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-all">
+            Download QR Code
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- Right Sidebar -->
     <div class="w-full md:w-1/4 bg-white p-4 rounded shadow">
       <h2 class="font-semibold text-lg mb-2">📐 Profile Designs</h2>
