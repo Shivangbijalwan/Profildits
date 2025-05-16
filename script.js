@@ -1,152 +1,128 @@
-// Elements
-const colorPicker = document.getElementById('colorPicker');
-const colorHex = document.getElementById('colorHex');
-
+// Avatar upload with image preview
 const avatarInput = document.getElementById('avatarInput');
-const avatarPreview = document.getElementById('avatarPreview');
+const avatarDisplay = document.getElementById('avatarDisplay');
 
-const nameInput = document.getElementById('nameInput');
-const aboutInput = document.getElementById('aboutInput');
-const aiAboutBtn = document.getElementById('aiAboutBtn');
-
-const socialProfilesContainer = document.getElementById('socialProfilesContainer');
-const addSocialBtn = document.getElementById('addSocialBtn');
-
-const skillsInput = document.getElementById('skillsInput');
-const educationInput = document.getElementById('educationInput');
-
-const interestInput = document.getElementById('interestInput');
-const interestChipsContainer = document.getElementById('interestChips');
-
-const designButtons = document.querySelectorAll('.design-button');
-const profilePreview = document.getElementById('profilePreview');
-
-const generateBtn = document.getElementById('generateLinkBtn');
-const shareLink = document.getElementById('shareLink');
-const qrCode = document.getElementById('qrCode');
-const qrContainer = document.getElementById('qrContainer');
-const downloadQR = document.getElementById('downloadQR');
-
-// --- THEME COLOR ---
-
-colorPicker.addEventListener('input', (e) => {
-  const val = e.target.value;
-  document.documentElement.style.setProperty('--user-theme-color', val);
-  colorHex.textContent = val;
-});
-
-// --- AVATAR UPLOAD & BASIC ADJUSTMENT ---
-
+avatarDisplay.addEventListener('click', () => avatarInput.click());
 avatarInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = (ev) => {
-    avatarPreview.style.backgroundImage = `url(${ev.target.result})`;
-    avatarPreview.style.backgroundSize = 'cover';
-    avatarPreview.style.backgroundPosition = 'center';
+  reader.onload = () => {
+    avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover">`;
   };
   reader.readAsDataURL(file);
 });
 
-// --- ABOUT AI SUGGESTION ---
+// Color picker changes profile theme
+const colorPicker = document.getElementById('colorPicker');
+const profileArea = document.getElementById('profile-area');
 
-const aiAboutSuggestions = [
-  "Passionate about technology and coding.",
-  "Creative problem solver with strong teamwork skills.",
-  "Lifelong learner excited about AI and web development.",
-  "Dedicated professional with a focus on user experience.",
-  "Aspiring full-stack developer with a love for design.",
+colorPicker.addEventListener('input', () => {
+  profileArea.style.borderColor = colorPicker.value;
+  profileArea.style.backgroundColor = `${colorPicker.value}20`;
+});
+
+// AI button changes About content
+const aiBtn = document.getElementById('aiBtn');
+const aboutInput = document.getElementById('aboutInput');
+const aiSamples = [
+  "Creative front-end developer passionate about design and user experience.",
+  "Problem-solver with a knack for clean, efficient code.",
+  "A lifelong learner exploring the future of web and AI."
 ];
 
-aiAboutBtn.addEventListener('click', () => {
-  // Pick a random AI suggestion from the list
-  const randomSuggestion = aiAboutSuggestions[Math.floor(Math.random() * aiAboutSuggestions.length)];
-  aboutInput.value = randomSuggestion;
+aiBtn.addEventListener('click', () => {
+  const random = Math.floor(Math.random() * aiSamples.length);
+  aboutInput.value = aiSamples[random];
 });
 
-// --- SOCIAL MEDIA LINKS ---
+// Interests as tag-based chips
+const interestInput = document.getElementById('interestInput');
+const interestChips = document.getElementById('interestChips');
 
-addSocialBtn.addEventListener('click', () => {
-  const newInput = document.createElement('input');
-  newInput.type = 'url';
-  newInput.placeholder = 'Add social profile link';
-  newInput.className = 'w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2';
-  socialProfilesContainer.appendChild(newInput);
-});
-
-// --- INTEREST TAGS ---
-
-interestInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && interestInput.value.trim() !== '') {
+interestInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
     e.preventDefault();
-    addInterestChip(interestInput.value.trim());
+    const text = interestInput.value.trim();
+    if (!text) return;
+
+    const chip = document.createElement('div');
+    chip.className = 'bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1';
+    chip.innerHTML = `${text} <span class="cursor-pointer text-red-500">&times;</span>`;
+    interestChips.appendChild(chip);
+
+    chip.querySelector('span').addEventListener('click', () => chip.remove());
+
     interestInput.value = '';
   }
 });
 
-function addInterestChip(text) {
-  const chip = document.createElement('div');
-  chip.className = 'inline-flex items-center bg-blue-200 text-blue-800 rounded-full px-3 py-1 m-1 cursor-pointer select-none';
+// Add social profile links
+const profileLinks = document.getElementById('profileLinks');
+const addLinkBtn = document.getElementById('addLinkBtn');
 
-  chip.textContent = text;
+addLinkBtn.addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'url';
+  input.placeholder = 'Enter profile link';
+  input.className = 'w-full mt-1 p-2 border rounded';
+  input.target = '_blank';
+  profileLinks.appendChild(input);
+});
 
-  const closeBtn = document.createElement('span');
-  closeBtn.className = 'ml-2 text-blue-600 font-bold cursor-pointer';
-  closeBtn.textContent = '×';
-  closeBtn.onclick = () => chip.remove();
+// Layout changer
+const layouts = document.querySelectorAll('.profile-style');
 
-  chip.appendChild(closeBtn);
-  interestChipsContainer.appendChild(chip);
-}
-
-// --- PROFILE DESIGN SWITCH ---
-
-designButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    // Remove active class from all buttons
-    designButtons.forEach(btn => btn.classList.remove('border-4', 'border-blue-600'));
-
-    // Add active class to clicked button
-    button.classList.add('border-4', 'border-blue-600');
-
-    // Change profilePreview layout based on data-layout attribute
-    const layout = button.dataset.layout;
-    profilePreview.className = `p-6 rounded shadow bg-white text-gray-900 ${layout}`;
+layouts.forEach((layout, index) => {
+  layout.addEventListener('click', () => {
+    profileArea.className = 'w-full md:w-2/4 bg-white p-4 rounded shadow';
+    if (index === 0) {
+      profileArea.classList.add('border-2', 'border-blue-500');
+    } else if (index === 1) {
+      profileArea.classList.add('bg-gray-100', 'shadow-xl');
+    } else if (index === 2) {
+      profileArea.classList.add('scale-105', 'transition-transform');
+    }
   });
 });
 
-// --- GENERATE SHARE LINK & QR CODE ---
+// Generate profile shareable link & QR code
+const generateLinkBtn = document.getElementById('generateLinkBtn');
+const shareLink = document.getElementById('shareLink');
+const qrContainer = document.getElementById('qrContainer');
+const qrCodeDiv = document.getElementById('qrCode');
+const downloadQRBtn = document.getElementById('downloadQR');
 
-generateBtn.addEventListener('click', () => {
-  // For demo - generate a dummy unique link
-  const userId = Math.floor(Math.random() * 1000000);
-  const link = `https://profildits.com/user/${userId}`;
+generateLinkBtn.addEventListener('click', async () => {
+  const canvas = await html2canvas(document.getElementById('profile-area'));
+  const dataUrl = canvas.toDataURL();
 
-  shareLink.textContent = link;
-  shareLink.href = link;
+  const blob = await fetch(dataUrl).then(res => res.blob());
+  const file = new File([blob], "profile.png", { type: "image/png" });
+  const fileUrl = URL.createObjectURL(file);
+
+  shareLink.textContent = fileUrl;
+  shareLink.href = fileUrl;
   shareLink.classList.remove('hidden');
 
-  qrContainer.classList.remove('hidden');
-  qrCode.innerHTML = ''; // Clear previous QR
-
-  new QRCode(qrCode, {
-    text: link,
-    width: 150,
-    height: 150,
+  qrCodeDiv.innerHTML = '';
+  new QRCode(qrCodeDiv, {
+    text: fileUrl,
+    width: 128,
+    height: 128,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
   });
 
-  // Setup download QR button
-  setTimeout(() => {
-    downloadQR.onclick = () => {
-      const qrCanvas = qrCode.querySelector('canvas');
-      if (!qrCanvas) return;
-      const imgData = qrCanvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = imgData;
-      a.download = 'profildits-qr.png';
-      a.click();
-    };
-  }, 300);
+  qrContainer.classList.remove('hidden');
+
+  downloadQRBtn.onclick = () => {
+    const qrCanvas = qrCodeDiv.querySelector('canvas');
+    const qrImg = qrCanvas.toDataURL("image/png");
+    const a = document.createElement('a');
+    a.href = qrImg;
+    a.download = "profile_qr.png";
+    a.click();
+  };
 });
