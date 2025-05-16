@@ -168,53 +168,6 @@ body {
   </div>
 <div id="tsparticles" class="fixed inset-0 -z-10"></div>
 
-<button id="shareBtn" class="mt-5 px-6 py-3 bg-indigo-700 text-white rounded-lg">
-  Share My Profile
-</button>
-
-<script>
-  const profileElement = document.getElementById("profile-area");
-
-  document.getElementById("shareBtn").addEventListener("click", () => {
-    const profileUrl = window.location.href; // Make sure this contains a unique ID or params
-
-    html2canvas(profileElement).then(canvas => {
-      canvas.toBlob(blob => {
-        const file = new File([blob], "profile.png", { type: "image/png" });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          // ✅ Share image + text (only supported on mobile)
-          navigator.share({
-            title: "My Profildits Profile",
-            text: "Check out my Profildits profile!",
-            files: [file],
-            url: profileUrl // not supported in all browsers with files, but safe to include
-          }).catch(error => {
-            console.error("Error sharing with image:", error);
-            fallbackShare(profileUrl); // fallback if image sharing fails
-          });
-        } else {
-          // ❌ Image sharing not supported, fallback to text+URL
-          fallbackShare(profileUrl);
-        }
-      });
-    });
-  });
-
-  function fallbackShare(url) {
-    if (navigator.share) {
-      navigator.share({
-        title: "My Profildits Profile",
-        text: "Check out my Profildits profile!",
-        url: url
-      }).catch(err => console.error("Fallback share failed:", err));
-    } else {
-      // Final fallback: copy to clipboard
-      navigator.clipboard.writeText(url);
-      alert("Your profile link was copied to clipboard!");
-    }
-  }
-</script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="script.js"></script>
