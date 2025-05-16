@@ -178,27 +178,48 @@ document.getElementById("copyLinkBtn").addEventListener("click", () => {
 });
 
 
-const profileElement = document.getElementById("profile-area");
 
-html2canvas(profileElement).then(canvas => {
-  canvas.toBlob(blob => {
-    const file = new File([blob], "profile.png", { type: "image/png" });
+  const profileElement = document.getElementById("profile-area");
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  document.getElementById("shareBtn").addEventListener("click", () => {
+    const profileUrl = window.location.href; // Make sure this contains a unique ID or params
+
+    html2canvas(profileElement).then(canvas => {
+      canvas.toBlob(blob => {
+        const file = new File([blob], "profile.png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          // ✅ Share image + text (only supported on mobile)
+          navigator.share({
+            title: "My Profildits Profile",
+            text: "Check out my Profildits profile!",
+            files: [file],
+            url: profileUrl // not supported in all browsers with files, but safe to include
+          }).catch(error => {
+            console.error("Error sharing with image:", error);
+            fallbackShare(profileUrl); // fallback if image sharing fails
+          });
+        } else {
+          // ❌ Image sharing not supported, fallback to text+URL
+          fallbackShare(profileUrl);
+        }
+      });
+    });
+  });
+
+  function fallbackShare(url) {
+    if (navigator.share) {
       navigator.share({
         title: "My Profildits Profile",
         text: "Check out my Profildits profile!",
-        files: [file]
-      }).then(() => {
-        console.log('Shared successfully!');
-      }).catch(error => {
-        console.error('Error sharing:', error);
-      });
+        url: url
+      }).catch(err => console.error("Fallback share failed:", err));
     } else {
-      alert("Sharing image is not supported on this browser.");
+      // Final fallback: copy to clipboard
+      navigator.clipboard.writeText(url);
+      alert("Your profile link was copied to clipboard!");
     }
-  });
-});
+  }
 
   // Fix position to avoid scroll in canvas capture
   profileArea.style.position = 'relative';
