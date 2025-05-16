@@ -133,25 +133,14 @@ body {
           </button>
      <div class="mt-6">
   <h3 class="text-lg font-semibold mb-3">🔗 Share your profile</h3>
-  <div class="flex flex-wrap gap-4 text-xl">
-    <a id="whatsappShare" target="_blank" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full flex items-center justify-center">
-      <i data-lucide="whatsapp" class="w-5 h-5"></i>
-    </a>
-    <a id="facebookShare" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full flex items-center justify-center">
-      <i data-lucide="facebook" class="w-5 h-5"></i>
-    </a>
-    <a id="twitterShare" target="_blank" class="bg-blue-400 hover:bg-blue-500 text-white p-3 rounded-full flex items-center justify-center">
-      <i data-lucide="twitter" class="w-5 h-5"></i>
-    </a>
-    <a id="linkedinShare" target="_blank" class="bg-blue-800 hover:bg-blue-900 text-white p-3 rounded-full flex items-center justify-center">
-      <i data-lucide="linkedin" class="w-5 h-5"></i>
-    </a>
-    <button id="copyLinkBtn" class="bg-gray-700 hover:bg-gray-800 text-white p-3 rounded-full flex items-center justify-center">
-      <i data-lucide="copy" class="w-5 h-5"></i>
-    </button>
-  </div>
-  <p id="copyMsg" class="text-green-700 mt-2 hidden text-sm">✅ Link copied to clipboard!</p>
+  <div class="flex flex-wrap gap-4 mt-8">
+  <button onclick="shareOnFacebook()" class="bg-blue-600 text-white px-4 py-2 rounded">Share on Facebook</button>
+  <button onclick="shareOnTwitter()" class="bg-sky-500 text-white px-4 py-2 rounded">Share on Twitter</button>
+  <button onclick="shareOnLinkedIn()" class="bg-blue-700 text-white px-4 py-2 rounded">Share on LinkedIn</button>
+  <button onclick="shareOnWhatsApp()" class="bg-green-500 text-white px-4 py-2 rounded">Share on WhatsApp</button>
+  <button onclick="nativeShare()" class="bg-gray-700 text-white px-4 py-2 rounded">📲 Share via App</button>
 </div>
+
 
 
           <br><br>

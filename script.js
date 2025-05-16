@@ -183,6 +183,15 @@ document.getElementById("copyLinkBtn").addEventListener("click", () => {
 });
 
 
+if (navigator.share) {
+  navigator.share({
+    title: 'Check out my Profildits profile',
+    text: 'Here is my profile:',
+    url: window.location.href
+  });
+}
+
+
   // Fix position to avoid scroll in canvas capture
   profileArea.style.position = 'relative';
   profileArea.style.top = `-${scrollY}px`;
