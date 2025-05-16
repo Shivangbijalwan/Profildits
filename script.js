@@ -19,8 +19,12 @@ const colorPicker = document.getElementById('colorPicker');
 const profileArea = document.getElementById('profile-area');
 
 colorPicker.addEventListener('input', () => {
-  profileArea.style.borderColor = colorPicker.value;
-  profileArea.style.backgroundColor = `${colorPicker.value}20`;
+  const color = colorPicker.value;
+  profileArea.style.setProperty('background-color', `${color}10`);
+  profileArea.style.setProperty('border-color', color);
+  profileArea.querySelectorAll('input, textarea').forEach(el => {
+    el.style.backgroundColor = `${color}10`;
+  });
 });
 
 // AI button changes About content
@@ -76,13 +80,13 @@ const layouts = document.querySelectorAll('.profile-style');
 
 layouts.forEach((layout, index) => {
   layout.addEventListener('click', () => {
-    profileArea.className = 'w-full md:w-2/4 bg-white p-4 rounded shadow transition-all duration-300';
+    profileArea.className = 'w-full md:w-2/4 p-4 rounded shadow transition-all duration-300';
     if (index === 0) {
-      profileArea.classList.add('border-2', 'border-blue-500');
+      profileArea.classList.add('border-2', 'border-blue-500', 'bg-white');
     } else if (index === 1) {
       profileArea.classList.add('bg-gray-100', 'shadow-xl');
     } else if (index === 2) {
-      profileArea.classList.add('scale-105');
+      profileArea.classList.add('scale-105', 'bg-white');
     }
   });
 });
@@ -94,10 +98,22 @@ const qrContainer = document.getElementById('qrContainer');
 const qrCodeDiv = document.getElementById('qrCode');
 const downloadQRBtn = document.getElementById('downloadQR');
 
-generateLinkBtn.addEventListener('click', async () => {
-  const canvas = await html2canvas(document.getElementById('profile-area'));
-  const dataUrl = canvas.toDataURL();
+function hideDownloadButtonDuringCapture() {
+  generateLinkBtn.style.display = 'none';
+  downloadQRBtn.style.display = 'none';
+}
 
+function showDownloadButtonAfterCapture() {
+  generateLinkBtn.style.display = '';
+  downloadQRBtn.style.display = '';
+}
+
+generateLinkBtn.addEventListener('click', async () => {
+  hideDownloadButtonDuringCapture();
+  const canvas = await html2canvas(document.getElementById('profile-area'));
+  showDownloadButtonAfterCapture();
+
+  const dataUrl = canvas.toDataURL();
   const blob = await fetch(dataUrl).then(res => res.blob());
   const file = new File([blob], "profile.png", { type: "image/png" });
   const fileUrl = URL.createObjectURL(file);
@@ -138,20 +154,21 @@ inputs.forEach(input => {
   });
 });
 
-// Dark Mode Toggle with save to localStorage
+// Dark Mode Toggle with improved styling
 const darkToggle = document.createElement('button');
 darkToggle.className = 'fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded shadow z-50';
 document.body.appendChild(darkToggle);
 
 let isDark = localStorage.getItem('darkMode') === 'true';
+
 const applyDarkMode = () => {
-  if (isDark) {
-    document.body.classList.add('bg-black-900', 'text-white');
-    darkToggle.innerText = '☀️ Light Mode';
-  } else {
-    document.body.classList.remove('bg-white-900', 'text-black');
-    darkToggle.innerText = '🌙 Dark Mode';
-  }
+  document.body.classList.toggle('bg-gray-900', isDark);
+  document.body.classList.toggle('text-white', isDark);
+  document.querySelectorAll('.bg-white, .bg-gray-100').forEach(el => {
+    el.classList.toggle('bg-gray-800', isDark);
+    el.classList.toggle('text-white', isDark);
+  });
+  darkToggle.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
 };
 
 applyDarkMode();
