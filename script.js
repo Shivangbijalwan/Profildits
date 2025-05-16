@@ -146,6 +146,30 @@ generateLinkBtn.addEventListener('click', async () => {
   const imageUrl = result.data.url;
 
   shareLink.textContent = imageUrl;
+  // Display the shareable link clearly
+shareLink.textContent = imageUrl;
+shareLink.href = imageUrl;
+shareLink.classList.remove('hidden');
+shareLink.style.color = "#1d4ed8"; // Tailwind's blue-700
+shareLink.style.fontWeight = "bold";
+
+// Add Copy Button next to the link
+let copyBtn = document.getElementById('copyLinkBtn');
+if (!copyBtn) {
+  copyBtn = document.createElement('button');
+  copyBtn.id = 'copyLinkBtn';
+  copyBtn.textContent = 'Copy Link';
+  copyBtn.className = 'ml-2 px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition';
+  shareLink.parentNode.appendChild(copyBtn);
+}
+
+copyBtn.onclick = () => {
+  navigator.clipboard.writeText(imageUrl).then(() => {
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => (copyBtn.textContent = 'Copy Link'), 1500);
+  });
+};
+
   shareLink.href = imageUrl;
   shareLink.classList.remove('hidden');
 
