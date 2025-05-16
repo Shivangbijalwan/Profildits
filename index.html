@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profildits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen p-4">
+  <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 space-y-6">
+
+    <!-- Avatar Upload -->
+    <div class="text-center">
+      <input type="file" id="avatarInput" class="hidden" accept="image/*" />
+      <label for="avatarInput">
+        <div id="avatarPreview" class="w-24 h-24 mx-auto rounded-full bg-gray-200 cursor-pointer flex items-center justify-center text-gray-500">
+          Upload Avatar
+        </div>
+      </label>
+    </div>
+
+    <!-- Name and About -->
+    <input id="name" type="text" placeholder="Your Name" class="w-full p-2 border rounded">
+    <textarea id="about" placeholder="About You" class="w-full p-2 border rounded"></textarea>
+    <button onclick="suggestAbout()" class="bg-blue-500 text-white px-4 py-2 rounded">AI Suggest About</button>
+
+    <!-- Social Links -->
+    <div class="space-y-2">
+      <input id="linkedin" type="url" placeholder="LinkedIn URL" class="w-full p-2 border rounded">
+      <input id="github" type="url" placeholder="GitHub URL" class="w-full p-2 border rounded">
+    </div>
+
+    <!-- Skills -->
+    <input id="skillInput" placeholder="Add Skill and press Enter" class="w-full p-2 border rounded">
+    <div id="skills" class="flex flex-wrap gap-2 mt-2"></div>
+
+    <!-- Education -->
+    <textarea id="education" placeholder="Your Education/Degrees" class="w-full p-2 border rounded"></textarea>
+
+    <!-- Interests -->
+    <input id="interestInput" placeholder="Add Interest and press Enter" class="w-full p-2 border rounded">
+    <div id="interests" class="flex flex-wrap gap-2 mt-2"></div>
+
+    <!-- Download Button -->
+    <button onclick="downloadProfile()" class="bg-green-500 text-white px-4 py-2 rounded w-full">Download My Profile</button>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>
