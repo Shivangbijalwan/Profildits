@@ -138,16 +138,26 @@ inputs.forEach(input => {
   });
 });
 
-// Dark Mode Toggle
+// Dark Mode Toggle with save to localStorage
 const darkToggle = document.createElement('button');
-darkToggle.innerText = '🌙 Dark Mode';
 darkToggle.className = 'fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded shadow z-50';
 document.body.appendChild(darkToggle);
 
-let isDark = false;
+let isDark = localStorage.getItem('darkMode') === 'true';
+const applyDarkMode = () => {
+  if (isDark) {
+    document.body.classList.add('bg-gray-900', 'text-white');
+    darkToggle.innerText = '☀️ Light Mode';
+  } else {
+    document.body.classList.remove('bg-gray-900', 'text-white');
+    darkToggle.innerText = '🌙 Dark Mode';
+  }
+};
+
+applyDarkMode();
+
 darkToggle.addEventListener('click', () => {
-  document.body.classList.toggle('bg-gray-900');
-  document.body.classList.toggle('text-white');
   isDark = !isDark;
-  darkToggle.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  localStorage.setItem('darkMode', isDark);
+  applyDarkMode();
 });
