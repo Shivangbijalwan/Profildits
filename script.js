@@ -1,32 +1,56 @@
-// Avatar upload with image preview
+// Avatar upload with image preview and drag-drop support
 const avatarInput = document.getElementById('avatarInput');
 const avatarDisplay = document.getElementById('avatarDisplay');
 
 avatarDisplay.addEventListener('click', () => avatarInput.click());
-avatarInput.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-   avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover rounded-full">`;
-
-  };
-  reader.readAsDataURL(file);
+avatarInput.addEventListener('change', handleAvatarUpload);
+avatarDisplay.addEventListener('dragover', (e) => e.preventDefault());
+avatarDisplay.addEventListener('drop', (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) previewAvatar(file);
 });
 
-// Color picker changes profile theme
+function handleAvatarUpload(e) {
+  const file = e.target.files[0];
+  if (file) previewAvatar(file);
+}
+
+function previewAvatar(file) {
+  if (!file.type.startsWith('image/')) {
+    alert('Please upload a valid image file.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    avatarDisplay.innerHTML = `<img src="${reader.result}" alt="Avatar" class="w-full h-full object-cover">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Color picker changes profile theme with presets
 const colorPicker = document.getElementById('colorPicker');
 const profileArea = document.getElementById('profile-area');
 
-colorPicker.addEventListener('input', () => {
-  const color = colorPicker.value;
+const presets = ['#1D4ED8', '#10B981', '#F59E0B'];
+const presetContainer = document.getElementById('colorPresets');
+presets.forEach(color => {
+  const btn = document.createElement('button');
+  btn.className = 'w-6 h-6 rounded-full m-1';
+  btn.style.backgroundColor = color;
+  btn.onclick = () => applyThemeColor(color);
+  presetContainer.appendChild(btn);
+});
+
+colorPicker.addEventListener('input', () => applyThemeColor(colorPicker.value));
+
+function applyThemeColor(color) {
   profileArea.style.setProperty('background-color', `${color}10`);
   profileArea.style.setProperty('border-color', color);
   profileArea.querySelectorAll('input, textarea').forEach(el => {
     el.style.backgroundColor = `${color}10`;
   });
-});
+}
 
 // AI button changes About content
 const aiBtn = document.getElementById('aiBtn');
@@ -52,6 +76,12 @@ interestInput.addEventListener('keypress', (e) => {
     const text = interestInput.value.trim();
     if (!text) return;
 
+    const existingTags = Array.from(interestChips.children).map(chip => chip.textContent.trim().slice(0, -1));
+    if (existingTags.includes(text)) {
+      alert("This interest already exists.");
+      return;
+    }
+
     const chip = document.createElement('div');
     chip.className = 'bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1';
     chip.innerHTML = `${text} <span class="cursor-pointer text-red-500">&times;</span>`;
@@ -63,16 +93,25 @@ interestInput.addEventListener('keypress', (e) => {
   }
 });
 
-// Add social profile links
+// Add social profile links with limit and validation
 const profileLinks = document.getElementById('profileLinks');
 const addLinkBtn = document.getElementById('addLinkBtn');
 
 addLinkBtn.addEventListener('click', () => {
+  const currentLinks = profileLinks.querySelectorAll('input').length;
+  if (currentLinks >= 5) return alert("You can add up to 5 links only.");
+
   const input = document.createElement('input');
   input.type = 'url';
   input.placeholder = 'Enter profile link';
   input.className = 'w-full mt-1 p-2 border rounded';
   input.target = '_blank';
+  input.onblur = () => {
+    if (!input.value.startsWith('http')) {
+      alert("Please enter a valid URL starting with http or https");
+      input.focus();
+    }
+  };
   profileLinks.appendChild(input);
 });
 
@@ -81,7 +120,9 @@ const layouts = document.querySelectorAll('.profile-style');
 
 layouts.forEach((layout, index) => {
   layout.addEventListener('click', () => {
-    profileArea.className = 'w-full md:w-2/4 p-4 rounded shadow transition-all duration-300';
+    profileArea.classList.remove('border-2', 'border-blue-500', 'bg-white', 'bg-gray-100', 'shadow-xl', 'scale-105');
+    profileArea.classList.add('w-full', 'md:w-2/4', 'p-4', 'rounded', 'shadow', 'transition-all', 'duration-300');
+
     if (index === 0) {
       profileArea.classList.add('border-2', 'border-blue-500', 'bg-white');
     } else if (index === 1) {
@@ -112,23 +153,22 @@ function showDownloadButtonAfterCapture() {
 }
 
 generateLinkBtn.addEventListener('click', async () => {
+  generateLinkBtn.textContent = "Generating...";
+  generateLinkBtn.disabled = true;
+
   const scrollY = window.scrollY;
   const profileAreaEl = document.getElementById('profile-area');
   const originalPosition = profileAreaEl.style.position;
   const originalTop = profileAreaEl.style.top;
 
   hideDownloadButtonDuringCapture();
-
-  // Fix position
   profileAreaEl.style.position = 'relative';
   profileAreaEl.style.top = `-${scrollY}px`;
 
   const canvas = await html2canvas(profileAreaEl);
 
-  // Reset position
   profileAreaEl.style.position = originalPosition;
   profileAreaEl.style.top = originalTop;
-
   showDownloadButtonAfterCapture();
 
   const dataUrl = canvas.toDataURL();
@@ -137,7 +177,7 @@ generateLinkBtn.addEventListener('click', async () => {
   const formData = new FormData();
   formData.append("image", base64Image);
 
-  const response = await fetch("https://api.imgbb.com/1/upload?key=6eef1f3aadb547e0e46840dfd1e63d95", {
+  const response = await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY", {
     method: "POST",
     body: formData
   });
@@ -146,30 +186,6 @@ generateLinkBtn.addEventListener('click', async () => {
   const imageUrl = result.data.url;
 
   shareLink.textContent = imageUrl;
-  // Display the shareable link clearly
-shareLink.textContent = imageUrl;
-shareLink.href = imageUrl;
-shareLink.classList.remove('hidden');
-shareLink.style.color = "#1d4ed8"; // Tailwind's blue-700
-shareLink.style.fontWeight = "bold";
-
-// Add Copy Button next to the link
-let copyBtn = document.getElementById('copyLinkBtn');
-if (!copyBtn) {
-  copyBtn = document.createElement('button');
-  copyBtn.id = 'copyLinkBtn';
-  copyBtn.textContent = 'Copy Link';
-  copyBtn.className = 'ml-2 px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition';
-  shareLink.parentNode.appendChild(copyBtn);
-}
-
-copyBtn.onclick = () => {
-  navigator.clipboard.writeText(imageUrl).then(() => {
-    copyBtn.textContent = 'Copied!';
-    setTimeout(() => (copyBtn.textContent = 'Copy Link'), 1500);
-  });
-};
-
   shareLink.href = imageUrl;
   shareLink.classList.remove('hidden');
 
@@ -192,6 +208,15 @@ copyBtn.onclick = () => {
     a.download = "profile_qr.png";
     a.click();
   };
+
+  shareLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(shareLink.href);
+    alert('Link copied to clipboard!');
+  });
+
+  generateLinkBtn.textContent = "Generate Link";
+  generateLinkBtn.disabled = false;
 });
 
 // Live Preview Feature
