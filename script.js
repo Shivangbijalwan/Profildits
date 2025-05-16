@@ -181,7 +181,7 @@ document.getElementById("copyLinkBtn").addEventListener("click", () => {
 if (navigator.share) {
   navigator.share({
     title: 'Profiledits Profile',
-    text: 'Check out my Profildits profile:',
+    text: 'Check out Profildits profile:',
     url: window.location.href
   });
 }
