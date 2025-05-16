@@ -6,7 +6,7 @@
   <title>Profildits</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans transition-colors duration-300" id="mainBody">
   <!-- Header -->
   <header class="flex items-center justify-between p-4 bg-white shadow">
     <div class="flex items-center gap-3">
@@ -21,15 +21,15 @@
     <aside class="col-span-2 bg-white p-4 rounded shadow">
       <h2 class="font-semibold text-lg mb-4">Colour Pallet</h2>
       <div class="space-y-3">
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" />
-        <input type="color" class="w-full h-10 cursor-pointer border rounded" />
+        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
+        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
+        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
+        <input type="color" class="w-full h-10 cursor-pointer border rounded" onchange="changeColor(this.value)" />
       </div>
     </aside>
 
     <!-- Profile Form -->
-    <section class="col-span-6 bg-white p-6 rounded shadow">
+    <section class="col-span-6 bg-white p-6 rounded shadow transition-all duration-500" id="profileSection">
       <div class="flex justify-center mb-6">
         <label class="cursor-pointer">
           <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
@@ -41,15 +41,15 @@
       </div>
 
       <div class="space-y-4">
-        <input type="text" placeholder="Name" class="w-full border rounded p-2" />
+        <input type="text" placeholder="Name" class="w-full border rounded p-2" id="name" />
         <div class="flex items-center gap-2">
-          <textarea placeholder="About" class="w-full border rounded p-2"></textarea>
-          <button class="bg-blue-500 text-white px-3 py-2 rounded">AI</button>
+          <textarea placeholder="About" class="w-full border rounded p-2" id="about"></textarea>
+          <button onclick="generateAIAbout()" class="bg-blue-500 text-white px-3 py-2 rounded">AI</button>
         </div>
-        <input type="text" placeholder="Bio" class="w-full border rounded p-2" />
-        <input type="text" placeholder="Skills" class="w-full border rounded p-2" />
-        <input type="text" placeholder="Degree / Education" class="w-full border rounded p-2" />
-        <button class="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+        <input type="text" placeholder="Bio" class="w-full border rounded p-2" id="bio" />
+        <input type="text" placeholder="Skills" class="w-full border rounded p-2" id="skills" />
+        <input type="text" placeholder="Degree / Education" class="w-full border rounded p-2" id="education" />
+        <button onclick="downloadProfile()" class="bg-green-500 text-white px-4 py-2 rounded">Download</button>
       </div>
     </section>
 
@@ -57,16 +57,16 @@
     <aside class="col-span-4 bg-white p-4 rounded shadow">
       <h2 class="font-semibold text-lg mb-4">Profile Designs</h2>
       <div class="grid grid-cols-2 gap-4">
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer">
+        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(1)">
           <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 1" />
         </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer">
+        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(2)">
           <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 2" />
         </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer">
+        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(3)">
           <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 3" />
         </div>
-        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer">
+        <div class="border p-2 rounded hover:ring-2 hover:ring-blue-500 cursor-pointer" onclick="switchProfileDesign(4)">
           <img src="https://via.placeholder.com/100x120" class="w-full h-auto" alt="Design 4" />
         </div>
       </div>
@@ -90,6 +90,50 @@
         reader.readAsDataURL(file);
       }
     });
+
+    function generateAIAbout() {
+      const about = document.getElementById("about");
+      about.value = "A passionate individual who loves to build and design digital products that make a difference.";
+    }
+
+    function changeColor(color) {
+      document.getElementById("mainBody").style.backgroundColor = color;
+    }
+
+    function switchProfileDesign(id) {
+      const profile = document.getElementById("profileSection");
+      switch (id) {
+        case 1:
+          profile.className = "col-span-6 bg-white p-6 rounded shadow border-l-8 border-blue-500 transition-all duration-500";
+          break;
+        case 2:
+          profile.className = "col-span-6 bg-white p-6 rounded shadow border-t-4 border-green-500 transition-all duration-500";
+          break;
+        case 3:
+          profile.className = "col-span-6 bg-white p-6 rounded shadow border-b-4 border-purple-500 transition-all duration-500";
+          break;
+        case 4:
+          profile.className = "col-span-6 bg-white p-6 rounded shadow border-r-8 border-pink-500 transition-all duration-500";
+          break;
+      }
+    }
+
+    function downloadProfile() {
+      const data = {
+        name: document.getElementById("name").value,
+        about: document.getElementById("about").value,
+        bio: document.getElementById("bio").value,
+        skills: document.getElementById("skills").value,
+        education: document.getElementById("education").value
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "profile.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   </script>
 </body>
 </html>
