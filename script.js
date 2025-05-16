@@ -146,10 +146,10 @@ document.body.appendChild(darkToggle);
 let isDark = localStorage.getItem('darkMode') === 'true';
 const applyDarkMode = () => {
   if (isDark) {
-    document.body.classList.add('bg-gray-900', 'text-white');
+    document.body.classList.add('bg-black-900', 'text-white');
     darkToggle.innerText = '☀️ Light Mode';
   } else {
-    document.body.classList.remove('bg-gray-900', 'text-white');
+    document.body.classList.remove('bg-white-900', 'text-black');
     darkToggle.innerText = '🌙 Dark Mode';
   }
 };
