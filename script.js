@@ -1,3 +1,4 @@
+// Avatar upload with image preview
 const avatarInput = document.getElementById('avatarInput');
 const avatarDisplay = document.getElementById('avatarDisplay');
 
@@ -14,11 +15,13 @@ avatarInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
+// Color picker changes profile theme
 const colorPicker = document.getElementById('colorPicker');
 const profileArea = document.getElementById('profile-area');
 
 colorPicker.addEventListener('input', () => {
   const color = colorPicker.value;
+  // Append opacity 10% (hex 1A = 26 decimal ~ 10%)
   profileArea.style.setProperty('background-color', color + '1A');
   profileArea.style.setProperty('border-color', color);
   profileArea.querySelectorAll('input, textarea').forEach(el => {
@@ -26,6 +29,7 @@ colorPicker.addEventListener('input', () => {
   });
 });
 
+// AI button changes About content
 const aiBtn = document.getElementById('aiBtn');
 const aboutInput = document.getElementById('aboutInput');
 const aiSamples = [
@@ -52,6 +56,7 @@ const aiSamples = [
   "I’m passionate about making tech accessible and enjoy creating inclusive user experiences.",
   "Detail-oriented developer with a knack for debugging and optimizing code for better performance.",
   "Always excited about emerging technologies like AI, blockchain, and cloud computing, eager to integrate them into my projects."
+
 ];
 
 aiBtn.addEventListener('click', () => {
@@ -59,6 +64,7 @@ aiBtn.addEventListener('click', () => {
   aboutInput.value = aiSamples[random];
 });
 
+// Interests as tag-based chips
 const interestInput = document.getElementById('interestInput');
 const interestChips = document.getElementById('interestChips');
 
@@ -79,6 +85,7 @@ interestInput.addEventListener('keypress', (e) => {
   }
 });
 
+// Add social profile links
 const profileLinks = document.getElementById('profileLinks');
 const addLinkBtn = document.getElementById('addLinkBtn');
 
@@ -96,40 +103,41 @@ layouts.forEach((layout, index) => {
     profileArea.className = 'w-full md:w-2/4 p-6 rounded shadow-lg transition-all duration-500 ease-in-out';
 
     switch (index) {
-      case 0:
+      case 0: // Layout 1 - Clean card with soft shadow
         profileArea.classList.add('bg-white', 'border', 'border-gray-200', 'shadow-md');
         break;
-      case 1:
+      case 1: // Layout 2 - Soft pastel background with subtle glow
         profileArea.classList.add('bg-gradient-to-br', 'from-pink-100', 'via-purple-100', 'to-blue-100', 'shadow-lg', 'ring-4', 'ring-indigo-200');
         break;
-      case 2:
+      case 2: // Layout 3 - Elevated with shadow and border-radius
         profileArea.classList.add('bg-white', 'rounded-2xl', 'shadow-xl', 'border-2', 'border-indigo-400');
         break;
-      case 3:
+      case 3: // Layout 4 - Neon glow effect with dark text
         profileArea.classList.add('bg-gray-900', 'text-white', 'rounded-xl', 'shadow-[0_0_15px_rgba(99,102,241,0.7)]', 'border', 'border-indigo-600');
         break;
-      case 4:
+      case 4: // Layout 5 - Frosted glass effect
         profileArea.classList.add('bg-white/30', 'backdrop-blur-lg', 'border', 'border-white/40', 'shadow-lg', 'text-gray-800');
         break;
-      case 5:
+      case 5: // Layout 6 - Vibrant gradient with subtle shadow
         profileArea.classList.add('bg-gradient-to-r', 'from-yellow-400', 'via-red-400', 'to-pink-500', 'text-white', 'rounded-lg', 'shadow-lg');
         break;
-      case 6:
+      case 6: // Layout 7 - Elegant card with drop shadow and smooth corners
         profileArea.classList.add('bg-white', 'rounded-xl', 'shadow-2xl', 'border', 'border-gray-300');
         break;
-      case 7:
+      case 7: // Layout 8 - Bold dark mode style with neon border
         profileArea.classList.add('bg-gray-800', 'text-white', 'rounded-lg', 'border-4', 'border-purple-500', 'shadow-[0_0_20px_rgba(139,92,246,0.7)]');
         break;
-      case 8:
+      case 8: // Layout 9 - Soft shadow with blue accent border and padding
         profileArea.classList.add('bg-white', 'border-4', 'border-blue-400', 'rounded-lg', 'shadow-md', 'p-8');
         break;
-      case 9:
+      case 9: // Layout 10 - Minimalist card with subtle hover scale
         profileArea.classList.add('bg-white', 'rounded-lg', 'shadow-sm', 'transition-transform', 'hover:scale-105');
         break;
     }
   });
 });
 
+// Generate profile shareable link & QR code with imgbb upload
 const generateLinkBtn = document.getElementById('generateLinkBtn');
 const shareLink = document.getElementById('shareLink');
 const qrContainer = document.getElementById('qrContainer');
@@ -178,11 +186,14 @@ generateLinkBtn.addEventListener('click', async () => {
     });
   }
 
+
+  // Fix position to avoid scroll in canvas capture
   profileArea.style.position = 'relative';
   profileArea.style.top = `-${scrollY}px`;
 
   const canvas = await html2canvas(profileArea);
 
+  // Reset position
   profileArea.style.position = originalPosition;
   profileArea.style.top = originalTop;
 
@@ -206,9 +217,10 @@ generateLinkBtn.addEventListener('click', async () => {
       shareLink.textContent = imageUrl;
       shareLink.href = imageUrl;
       shareLink.classList.remove('hidden');
-      shareLink.style.color = "#1d4ed8";
+      shareLink.style.color = "#1d4ed8"; // Tailwind blue-700
       shareLink.style.fontWeight = "bold";
 
+      // Add Copy Button next to the link if not already present
       let copyBtn = document.getElementById('copyLinkBtn');
       if (!copyBtn) {
         copyBtn = document.createElement('button');
@@ -225,6 +237,7 @@ generateLinkBtn.addEventListener('click', async () => {
         });
       };
 
+      // Generate QR code
       qrCodeDiv.innerHTML = '';
       new QRCode(qrCodeDiv, {
         text: imageUrl,
@@ -242,14 +255,68 @@ generateLinkBtn.addEventListener('click', async () => {
         const qrImg = qrCanvas.toDataURL("image/png");
         const a = document.createElement('a');
         a.href = qrImg;
-    a.download = 'profile-qr.png';
-    a.click();
-  };
+        a.download = "profile_qr.png";
+        a.click();
+      };
+    } else {
+      alert('Failed to upload image. Please try again.');
+    }
+  } catch (error) {
+    alert('Error uploading image: ' + error.message);
+  }
+});
 
-} else {
-  alert("Image upload failed. Please try again.");
+const suggestions = [
+  "Web Development", "App Development", "AI", "Gaming", "Crypto", "Photography",
+  "UI/UX", "Freelancing", "Fitness", "Travel", "Finance", "Music", "Startups",
+  "Design", "Video Editing", "3D Modelling", "Fashion", "Marketing", "Writing", "Blogging"
+];
+
+const input = document.getElementById("interestInput");
+const list = document.getElementById("suggestionList");
+const tagContainer = document.getElementById("selectedTags");
+
+function showSuggestions() {
+  const query = input.value.toLowerCase();
+  list.innerHTML = "";
+  if (!query) return list.classList.add("hidden");
+
+  const matches = suggestions.filter(item =>
+    item.toLowerCase().startsWith(query)
+  );
+
+  matches.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    li.className = "px-4 py-2 cursor-pointer hover:bg-gray-200";
+    li.onclick = () => selectTag(item);
+    list.appendChild(li);
+  });
+
+  list.classList.toggle("hidden", matches.length === 0);
 }
-} catch (error) {
-alert("Error uploading image. Please check your connection.");
+
+function selectTag(tag) {
+  const existingTags = [...tagContainer.children].map(tag => tag.textContent.trim());
+  if (existingTags.includes(tag)) return;
+
+  const tagEl = document.createElement("span");
+  tagEl.className = "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2";
+  tagEl.innerHTML = `${tag} <button onclick="this.parentElement.remove()" class="text-red-500 text-xs">×</button>`;
+  tagContainer.appendChild(tagEl);
+
+  input.value = "";
+  list.classList.add("hidden");
 }
+
+
+// Live Preview Feature - subtle highlight on input
+const inputs = document.querySelectorAll('input[type="text"], textarea');
+inputs.forEach(input => {
+  input.addEventListener('input', () => {
+    profileArea.classList.add('ring-2', 'ring-indigo-400');
+    setTimeout(() => {
+      profileArea.classList.remove('ring-2', 'ring-indigo-400');
+    }, 1000);
+  });
 });
