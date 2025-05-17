@@ -1,4 +1,3 @@
-// Avatar upload with image preview
 const avatarInput = document.getElementById('avatarInput');
 const avatarDisplay = document.getElementById('avatarDisplay');
 
@@ -15,13 +14,13 @@ avatarInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-// Color picker changes profile theme
+
 const colorPicker = document.getElementById('colorPicker');
 const profileArea = document.getElementById('profile-area');
 
 colorPicker.addEventListener('input', () => {
   const color = colorPicker.value;
-  // Append opacity 10% (hex 1A = 26 decimal ~ 10%)
+  
   profileArea.style.setProperty('background-color', color + '1A');
   profileArea.style.setProperty('border-color', color);
   profileArea.querySelectorAll('input, textarea').forEach(el => {
@@ -29,7 +28,7 @@ colorPicker.addEventListener('input', () => {
   });
 });
 
-// AI button changes About content
+
 const aiBtn = document.getElementById('aiBtn');
 const aboutInput = document.getElementById('aboutInput');
 const aiSamples = [
@@ -64,7 +63,7 @@ aiBtn.addEventListener('click', () => {
   aboutInput.value = aiSamples[random];
 });
 
-// Interests as tag-based chips
+
 const interestInput = document.getElementById('interestInput');
 const interestChips = document.getElementById('interestChips');
 
@@ -85,7 +84,7 @@ interestInput.addEventListener('keypress', (e) => {
   }
 });
 
-// Add social profile links
+
 const profileLinks = document.getElementById('profileLinks');
 const addLinkBtn = document.getElementById('addLinkBtn');
 
@@ -103,41 +102,41 @@ layouts.forEach((layout, index) => {
     profileArea.className = 'w-full md:w-2/4 p-6 rounded shadow-lg transition-all duration-500 ease-in-out';
 
     switch (index) {
-      case 0: // Layout 1 - Clean card with soft shadow
+      case 0: 
         profileArea.classList.add('bg-white', 'border', 'border-gray-200', 'shadow-md');
         break;
-      case 1: // Layout 2 - Soft pastel background with subtle glow
+      case 1: 
         profileArea.classList.add('bg-gradient-to-br', 'from-pink-100', 'via-purple-100', 'to-blue-100', 'shadow-lg', 'ring-4', 'ring-indigo-200');
         break;
-      case 2: // Layout 3 - Elevated with shadow and border-radius
+      case 2: 
         profileArea.classList.add('bg-white', 'rounded-2xl', 'shadow-xl', 'border-2', 'border-indigo-400');
         break;
-      case 3: // Layout 4 - Neon glow effect with dark text
+      case 3: 
         profileArea.classList.add('bg-gray-900', 'text-white', 'rounded-xl', 'shadow-[0_0_15px_rgba(99,102,241,0.7)]', 'border', 'border-indigo-600');
         break;
-      case 4: // Layout 5 - Frosted glass effect
+      case 4: 
         profileArea.classList.add('bg-white/30', 'backdrop-blur-lg', 'border', 'border-white/40', 'shadow-lg', 'text-gray-800');
         break;
-      case 5: // Layout 6 - Vibrant gradient with subtle shadow
+      case 5: 
         profileArea.classList.add('bg-gradient-to-r', 'from-yellow-400', 'via-red-400', 'to-pink-500', 'text-white', 'rounded-lg', 'shadow-lg');
         break;
-      case 6: // Layout 7 - Elegant card with drop shadow and smooth corners
+      case 6: 
         profileArea.classList.add('bg-white', 'rounded-xl', 'shadow-2xl', 'border', 'border-gray-300');
         break;
-      case 7: // Layout 8 - Bold dark mode style with neon border
+      case 7: 
         profileArea.classList.add('bg-gray-800', 'text-white', 'rounded-lg', 'border-4', 'border-purple-500', 'shadow-[0_0_20px_rgba(139,92,246,0.7)]');
         break;
-      case 8: // Layout 9 - Soft shadow with blue accent border and padding
+      case 8:
         profileArea.classList.add('bg-white', 'border-4', 'border-blue-400', 'rounded-lg', 'shadow-md', 'p-8');
         break;
-      case 9: // Layout 10 - Minimalist card with subtle hover scale
+      case 9: 
         profileArea.classList.add('bg-white', 'rounded-lg', 'shadow-sm', 'transition-transform', 'hover:scale-105');
         break;
     }
   });
 });
 
-// Generate profile shareable link & QR code with imgbb upload
+
 const generateLinkBtn = document.getElementById('generateLinkBtn');
 const shareLink = document.getElementById('shareLink');
 const qrContainer = document.getElementById('qrContainer');
@@ -187,13 +186,13 @@ generateLinkBtn.addEventListener('click', async () => {
   }
 
 
-  // Fix position to avoid scroll in canvas capture
+
   profileArea.style.position = 'relative';
   profileArea.style.top = `-${scrollY}px`;
 
   const canvas = await html2canvas(profileArea);
 
-  // Reset position
+ 
   profileArea.style.position = originalPosition;
   profileArea.style.top = originalTop;
 
@@ -217,10 +216,9 @@ generateLinkBtn.addEventListener('click', async () => {
       shareLink.textContent = imageUrl;
       shareLink.href = imageUrl;
       shareLink.classList.remove('hidden');
-      shareLink.style.color = "#1d4ed8"; // Tailwind blue-700
+      shareLink.style.color = "#1d4ed8"; 
       shareLink.style.fontWeight = "bold";
 
-      // Add Copy Button next to the link if not already present
       let copyBtn = document.getElementById('copyLinkBtn');
       if (!copyBtn) {
         copyBtn = document.createElement('button');
@@ -237,7 +235,7 @@ generateLinkBtn.addEventListener('click', async () => {
         });
       };
 
-      // Generate QR code
+
       qrCodeDiv.innerHTML = '';
       new QRCode(qrCodeDiv, {
         text: imageUrl,
@@ -310,7 +308,7 @@ function selectTag(tag) {
 }
 
 
-// Live Preview Feature - subtle highlight on input
+
 const inputs = document.querySelectorAll('input[type="text"], textarea');
 inputs.forEach(input => {
   input.addEventListener('input', () => {
