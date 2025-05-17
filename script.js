@@ -36,7 +36,7 @@ const aiSamples = [
   "Creative front-end developer passionate about design and user experience.",
   "Problem-solver with a knack for clean, efficient code.",
   "A lifelong learner exploring the future of web and AI.",
-   "I am a passionate software developer with over 5 years of experience building scalable web applications. I enjoy working with modern JavaScript frameworks and improving user experiences.",
+  "I am a passionate software developer with over 5 years of experience building scalable web applications. I enjoy working with modern JavaScript frameworks and improving user experiences.",
   "Hi! I’m a web enthusiast who loves crafting beautiful and intuitive interfaces. When I’m not coding, you’ll find me exploring photography and design trends.",
   "As a lifelong learner, I am always eager to take on new challenges and improve my skills in front-end and back-end development. I thrive in collaborative environments.",
   "Dedicated team player with a strong background in software engineering. I believe in communication, collaboration, and continuous improvement.",
@@ -102,7 +102,7 @@ layouts.forEach((layout, index) => {
   layout.addEventListener('click', () => {
     profileArea.className = 'w-full md:w-2/4 p-6 rounded shadow-lg transition-all duration-500 ease-in-out';
 
-    switch(index) {
+    switch (index) {
       case 0: // Layout 1 - Clean card with soft shadow
         profileArea.classList.add('bg-white', 'border', 'border-gray-200', 'shadow-md');
         break;
@@ -164,27 +164,27 @@ generateLinkBtn.addEventListener('click', async () => {
   hideDownloadButtonDuringCapture();
 
   document.getElementById("generateLinkBtn").addEventListener("click", () => {
-  const link = window.location.href;
+    const link = window.location.href;
 
-});
-
-document.getElementById("copyLinkBtn").addEventListener("click", () => {
-  const link = window.location.href;
-  navigator.clipboard.writeText(link).then(() => {
-    const msg = document.getElementById("copyMsg");
-    msg.classList.remove("hidden");
-    setTimeout(() => msg.classList.add("hidden"), 3000);
   });
-});
 
-
-if (navigator.share) {
-  navigator.share({
-    title: 'Profiledits Profile',
-    text: 'Check out Profildits profile:',
-    url: window.location.href
+  document.getElementById("copyLinkBtn").addEventListener("click", () => {
+    const link = window.location.href;
+    navigator.clipboard.writeText(link).then(() => {
+      const msg = document.getElementById("copyMsg");
+      msg.classList.remove("hidden");
+      setTimeout(() => msg.classList.add("hidden"), 3000);
+    });
   });
-}
+
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Profiledits Profile',
+      text: 'Check out Profildits profile:',
+      url: window.location.href
+    });
+  }
 
 
   // Fix position to avoid scroll in canvas capture
@@ -265,6 +265,50 @@ if (navigator.share) {
     alert('Error uploading image: ' + error.message);
   }
 });
+
+const suggestions = [
+  "Web Development", "App Development", "AI", "Gaming", "Crypto", "Photography",
+  "UI/UX", "Freelancing", "Fitness", "Travel", "Finance", "Music", "Startups",
+  "Design", "Video Editing", "3D Modelling", "Fashion", "Marketing", "Writing", "Blogging"
+];
+
+const input = document.getElementById("interestInput");
+const list = document.getElementById("suggestionList");
+const tagContainer = document.getElementById("selectedTags");
+
+function showSuggestions() {
+  const query = input.value.toLowerCase();
+  list.innerHTML = "";
+  if (!query) return list.classList.add("hidden");
+
+  const matches = suggestions.filter(item =>
+    item.toLowerCase().startsWith(query)
+  );
+
+  matches.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    li.className = "px-4 py-2 cursor-pointer hover:bg-gray-200";
+    li.onclick = () => selectTag(item);
+    list.appendChild(li);
+  });
+
+  list.classList.toggle("hidden", matches.length === 0);
+}
+
+function selectTag(tag) {
+  const existingTags = [...tagContainer.children].map(tag => tag.textContent.trim());
+  if (existingTags.includes(tag)) return;
+
+  const tagEl = document.createElement("span");
+  tagEl.className = "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2";
+  tagEl.innerHTML = `${tag} <button onclick="this.parentElement.remove()" class="text-red-500 text-xs">×</button>`;
+  tagContainer.appendChild(tagEl);
+
+  input.value = "";
+  list.classList.add("hidden");
+}
+
 
 // Live Preview Feature - subtle highlight on input
 const inputs = document.querySelectorAll('input[type="text"], textarea');
